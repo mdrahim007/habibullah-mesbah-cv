@@ -307,7 +307,7 @@ body {
 .sec h2 {
     font-family: var(--f-sans);
     font-size: 0.68rem;
-    font-weight: 700;
+    font-weight: 750;
     text-transform: uppercase;
     letter-spacing: 1.6px;
     color: var(--navy);
