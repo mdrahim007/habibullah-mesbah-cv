@@ -273,28 +273,23 @@ async function downloadCV() {
     body.style.padding = '0';
 
     try {
-        const opt = {
-            margin:       0,
-            filename:     'Md_Habibullah_Mesbah_CV.pdf',
-            image:        { type: 'jpeg', quality: 1 },
-            html2canvas:  {
-                scale: 3,
-                useCORS: true,
-                letterRendering: true,
-                logging: false,
-                width: page.scrollWidth,
-                height: page.scrollHeight,
-                x: 0,
-                y: 0,
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: page.scrollWidth,
-                windowHeight: page.scrollHeight
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
+        // Capture the element as a canvas
+        const canvas = await html2canvas(page, {
+            scale: 3,
+            useCORS: true,
+            letterRendering: true,
+            logging: false,
+            width: page.scrollWidth,
+            height: page.scrollHeight
+        });
 
-        await html2pdf().set(opt).from(page).save();
+        // Create a single-page A4 PDF and fit the image to it
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        const pdf = new jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+        const pdfW = 210;
+        const pdfH = 297;
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+        pdf.save('Md_Habibullah_Mesbah_CV.pdf');
     } catch (err) {
         console.error('PDF generation error:', err);
         alert('PDF generation failed: ' + err.message);
